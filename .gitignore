@@ -1,2 +1,11 @@
+*.opensdf
+*.sdf
+*.suo
+*.vcxproj.user
 /foo_whatsnew/Debug
 /foo_whatsnew/Release
+/Release
+/Debug
+/columns_ui-sdk/Release
+/columns_ui-sdk/Debug
+/foo_whatsnew/ipch

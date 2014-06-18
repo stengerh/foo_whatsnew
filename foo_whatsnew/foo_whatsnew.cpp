@@ -76,17 +76,17 @@ public:
 		nid.uCallbackMessage = WM_CALLBACKNI;
 
 #ifdef _UNICODE
-		pfc::stringcvt::convert_utf8_to_wide(nid.szTip, tabsize(nid.szTip), tip, infinite);
+		pfc::stringcvt::convert_utf8_to_wide(nid.szTip, tabsize(nid.szTip), tip, pfc::infinite_size);
 #else
-		pfc::stringcvt::convert_utf8_to_ansi(nid.szTip, tabsize(nid.szTip), tip, infinite);
+		pfc::stringcvt::convert_utf8_to_ansi(nid.szTip, tabsize(nid.szTip), tip, pfc::infinite_size);
 #endif
 
 #ifdef _UNICODE
-		pfc::stringcvt::convert_utf8_to_wide(nid.szInfo, tabsize(nid.szInfo), info, infinite);
-		pfc::stringcvt::convert_utf8_to_wide(nid.szInfoTitle, tabsize(nid.szInfoTitle), info_title, infinite);
+		pfc::stringcvt::convert_utf8_to_wide(nid.szInfo, tabsize(nid.szInfo), info, pfc::infinite_size);
+		pfc::stringcvt::convert_utf8_to_wide(nid.szInfoTitle, tabsize(nid.szInfoTitle), info_title, pfc::infinite_size);
 #else
-		pfc::stringcvt::convert_utf8_to_ansi(nid.szInfo, tabsize(nid.szInfo), info, infinite);
-		pfc::stringcvt::convert_utf8_to_ansi(nid.szInfoTitle, tabsize(nid.szInfoTitle), info_title, infinite);
+		pfc::stringcvt::convert_utf8_to_ansi(nid.szInfo, tabsize(nid.szInfo), info, pfc::infinite_size);
+		pfc::stringcvt::convert_utf8_to_ansi(nid.szInfoTitle, tabsize(nid.szInfoTitle), info_title, pfc::infinite_size);
 #endif
 		nid.uTimeout = 15000;
 		nid.dwInfoFlags = NIIF_INFO;

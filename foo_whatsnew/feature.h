@@ -15,7 +15,7 @@ class feature_info
 {
 public:
 	virtual const char *get_name() const = 0;
-	virtual void set_name(const char *p_name, t_size p_name_length = infinite) = 0;
+	virtual void set_name(const char *p_name, t_size p_name_length = pfc::infinite_size) = 0;
 
 	virtual GUID get_kind_guid() const = 0;
 	virtual void set_kind_guid(const GUID &p_guid) = 0;
@@ -100,7 +100,7 @@ public:
 	virtual void set_change_kind(t_change_kind p_kind) = 0;
 
 	virtual const char * get_change_description() const = 0;
-	virtual void set_change_description(const char *p_text, t_size p_text_length = infinite) = 0;
+	virtual void set_change_description(const char *p_text, t_size p_text_length = pfc::infinite_size) = 0;
 
 	virtual feature_handle_ptr get_feature() const = 0;
 	virtual void set_feature(feature_handle_ptr p_feature) = 0;

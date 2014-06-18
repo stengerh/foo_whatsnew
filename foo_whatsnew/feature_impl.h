@@ -12,7 +12,7 @@ public:
 	feature_info_impl(const feature_info_impl &p_source) {copy(p_source);}
 
 	virtual const char *get_name() const {return m_name;}
-	virtual void set_name(const char *p_name, t_size p_name_length = infinite) {m_name.set_string(p_name, p_name_length);}
+	virtual void set_name(const char *p_name, t_size p_name_length = pfc::infinite_size) {m_name.set_string(p_name, p_name_length);}
 
 	virtual GUID get_kind_guid() const {return m_kind_guid;}
 	virtual void set_kind_guid(const GUID &p_guid) {m_kind_guid = p_guid;}
@@ -41,7 +41,7 @@ public:
 	virtual void set_change_kind(t_change_kind p_kind) {m_change_kind = p_kind;}
 
 	virtual const char * get_change_description() const {return m_change_description;}
-	virtual void set_change_description(const char *p_text, t_size p_text_length = infinite) {m_change_description.set_string(p_text, p_text_length);}
+	virtual void set_change_description(const char *p_text, t_size p_text_length = pfc::infinite_size) {m_change_description.set_string(p_text, p_text_length);}
 
 	virtual feature_handle_ptr get_feature() const {return m_feature;}
 	virtual void set_feature(feature_handle_ptr p_feature) {m_feature = p_feature;}

@@ -48,8 +48,8 @@ extern CComModule _Module;
 
 //#include <shlobj.h>
 
-#include "../SDK/foobar2000.h"
-#include "../helpers/helpers.h"
+#include "foobar2000/SDK/foobar2000.h"
+#include "foobar2000/helpers/helpers.h"
 
 //#include <fbtlbase.h>
 //#include <fbtlsortctrl.h>
