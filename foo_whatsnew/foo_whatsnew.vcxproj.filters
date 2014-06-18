@@ -103,9 +103,6 @@
     <None Include="added.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="icon1.ico">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="removed.ico">
       <Filter>Resource Files</Filter>
     </None>

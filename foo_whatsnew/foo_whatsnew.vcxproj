@@ -134,7 +134,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="added.ico" />
-    <None Include="icon1.ico" />
     <None Include="removed.ico" />
   </ItemGroup>
   <ItemGroup>

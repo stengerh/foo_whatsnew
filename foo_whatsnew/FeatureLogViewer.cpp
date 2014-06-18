@@ -210,6 +210,7 @@ void CFeatureLogViewer::OnCancel(UINT code, int id, HWND wnd)
 void CFeatureLogViewer::CreateGroups()
 {
 	LVGROUP group;
+	group.cbSize = sizeof(LVGROUP);
 	group.mask = LVGF_GROUPID | LVGF_HEADER;
 	group.iGroupId = 0;
 

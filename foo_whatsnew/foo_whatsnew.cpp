@@ -2,7 +2,11 @@
 #include "FeatureLogViewer.h"
 #include "feature.h"
 
-DECLARE_COMPONENT_VERSION("Feature Watcher", "1.0.7", "Watches available features and reports changes.");
+DECLARE_COMPONENT_VERSION(
+	"Feature Watcher",
+	"1.0.8",
+	"Watches available features and reports changes."
+);
 
 static void g_show_feature_log();
 
