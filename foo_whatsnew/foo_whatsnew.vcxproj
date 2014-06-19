@@ -133,6 +133,7 @@
     <ClInclude Include="tools.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="added.ico" />
     <None Include="removed.ico" />
   </ItemGroup>
