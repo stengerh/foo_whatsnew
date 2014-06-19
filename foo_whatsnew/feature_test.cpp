@@ -18,7 +18,7 @@ public:
 
 	virtual const char *get_name()
 	{
-		return "Labbeduddel";
+		return "Test Feature Type";
 	}
 
 	virtual bool get_description(pfc::string_base &p_out)
@@ -36,7 +36,7 @@ public:
 	{
 		feature_info_impl info;
 		info.set_kind_guid(feature_kinds::test);
-		info.set_name("GenjuroXL");
+		info.set_name("Test Feature");
 
 		p_callback.on_feature_info(info);
 	}
