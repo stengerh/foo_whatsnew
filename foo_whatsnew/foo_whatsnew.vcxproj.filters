@@ -106,6 +106,12 @@
     <None Include="removed.ico">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="added-removed-overlay.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="overlay.ico">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="foo_whatsnew.rc">

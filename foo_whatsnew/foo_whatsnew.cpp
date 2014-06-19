@@ -5,7 +5,11 @@
 DECLARE_COMPONENT_VERSION(
 	"Feature Watcher",
 	"1.0.8",
-	"Watches available features and reports changes."
+	"Watches available features and reports changes.\n"
+	"\n"
+	"Some icons by Yusuke Kamiyamane. Licensed under a Creative Commons Attribution 3.0 License.\n"
+	"- http://p.yusukekamiyamane.com/\n"
+	"- http://creativecommons.org/licenses/by/3.0/\n"
 );
 
 static void g_show_feature_log();
@@ -176,8 +180,22 @@ public:
 		title << "?";
 
 		CIconHandle icon;
-#if 0
-		icon = static_api_ptr_t<ui_control>()->load_main_icon(cxSmIcon, cySmIcon);
+#if 1
+		CImageList iml;
+		iml.Create(cxSmIcon, cySmIcon, ILC_COLOR32 | ILC_MASK, 2, 2);
+
+		CIcon baseIcon = static_api_ptr_t<ui_control>()->load_main_icon(cxSmIcon, cySmIcon);
+		iml.AddIcon(baseIcon);
+
+		CIcon overlayIcon;
+		overlayIcon.LoadIcon(IDI_Overlay);
+		iml.AddIcon(overlayIcon);
+
+		CImageList iml2;
+		if (iml2.Merge(iml, 0, iml, 1, 0, 0))
+		{
+			icon = iml2.GetIcon(0);
+		}
 #else
 		icon.LoadIcon(IDI_Added);
 #endif

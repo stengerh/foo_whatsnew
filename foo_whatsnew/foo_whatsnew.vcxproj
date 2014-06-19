@@ -133,7 +133,9 @@
     <ClInclude Include="tools.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="added-removed-overlay.ico" />
     <None Include="added.ico" />
+    <None Include="overlay.ico" />
     <None Include="removed.ico" />
   </ItemGroup>
   <ItemGroup>
