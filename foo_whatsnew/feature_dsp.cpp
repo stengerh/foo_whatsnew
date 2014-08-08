@@ -31,7 +31,11 @@ static service_factory_single_t<feature_kind_dsp> g_dsp_factory;
 class feature_scanner_dsp : public feature_scanner
 {
 public:
+#ifdef EXTRACT_COMPONENT_NAME
+	virtual void scan(enum_feature_info_callback &p_callback, component_name_resolver * p_resolver)
+#else
 	virtual void scan(enum_feature_info_callback &p_callback)
+#endif
 	{
 		service_enum_t<dsp_entry> e;
 		service_ptr_t<dsp_entry> ptr;
@@ -60,6 +64,10 @@ public:
 			stream.write_lendian_t(guid, abort_callback_impl());
 
 			info.set_key(buffer.get_ptr(), buffer.get_size());
+
+#ifdef EXTRACT_COMPONENT_NAME
+			info.set_component_name_from_service(ptr, p_resolver);
+#endif
 
 			if (!p_callback.on_feature_info(info)) break;
 		}

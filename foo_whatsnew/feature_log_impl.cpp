@@ -2,6 +2,8 @@
 #include "feature.h"
 #include "feature_tools.h"
 #include "tools.h"
+#include "component_name_resolver_impl.h"
+#include "feature_log_json.h"
 
 class enum_feature_info_callback_impl : public enum_feature_info_callback
 {
@@ -117,20 +119,48 @@ class feature_log_impl : public feature_log
 
 	void get_present_features(pfc::list_base_t<feature_handle_ptr> &p_out)
 	{
+		component_name_resolver_impl resolver;
+
 		service_enum_t<feature_scanner> e;
 		service_ptr_t<feature_scanner> ptr;
 		while (e.next(ptr))
 		{
-			ptr->scan(enum_feature_info_callback_impl(p_out));
+			ptr->scan(enum_feature_info_callback_impl(p_out), &resolver);
 		}
 	}
 
-	void get_feature_list_path(pfc::string_base &p_out)
+	void get_feature_list_path(pfc::string_base &p_out, bool p_use_json = false)
 	{
-		p_out << core_api::get_profile_path() << "\\features.dat";
+		if (p_use_json)
+		{
+			p_out << core_api::get_profile_path() << "\\features.json";
+		}
+		else
+		{
+			p_out << core_api::get_profile_path() << "\\features.dat";
+		}
 	}
 
 	bool load_feature_list(pfc::list_base_t<feature_handle_ptr> &p_data)
+	{
+		try
+		{
+			return load_feature_list_json(p_data);
+		}
+		catch (const exception_io_not_found &)
+		{
+			bool loaded = load_feature_list_binary(p_data);
+
+			if (loaded)
+			{
+				save_feature_list_json(p_data);
+			}
+
+			return loaded;
+		}
+	}
+
+	bool load_feature_list_binary(pfc::list_base_t<feature_handle_ptr> &p_data)
 	{
 		pfc::string8 path;
 		get_feature_list_path(path);
@@ -153,7 +183,40 @@ class feature_log_impl : public feature_log
 		}
 	}
 
+	bool load_feature_list_json(pfc::list_base_t<feature_handle_ptr> &p_data)
+	{
+		pfc::string8 path;
+		get_feature_list_path(path, true);
+
+		try
+		{
+			abort_callback_impl abort;
+			service_ptr_t<file> stream;
+			filesystem::g_open_read(stream, path, abort);
+
+			load_feature_list_from_json_file(p_data, stream.get_ptr(), abort);
+
+			return true;
+		}
+		catch (const exception_io_not_found &)
+		{
+			throw;
+		}
+		catch (const exception_io &exc)
+		{
+			console::formatter() << "Loading feature list from " << path << " failed: " << exc;
+
+			return false;
+		}
+	}
+
 	void save_feature_list(const pfc::list_base_const_t<feature_handle_ptr> &p_data)
+	{
+		save_feature_list_json(p_data);
+		save_feature_list_binary(p_data);
+	}
+
+	void save_feature_list_binary(const pfc::list_base_const_t<feature_handle_ptr> &p_data)
 	{
 		pfc::string8 path;
 		get_feature_list_path(path);
@@ -165,6 +228,25 @@ class feature_log_impl : public feature_log
 			filesystem::g_open_write_new(stream, path, abort);
 
 			feature_handle_tools::write_to_stream(p_data, stream.get_ptr(), abort);
+		}
+		catch (const exception_io &exc)
+		{
+			console::formatter() << "Saving feature list to " << path << " failed: " << exc;
+		}
+	}
+
+	void save_feature_list_json(const pfc::list_base_const_t<feature_handle_ptr> &p_data)
+	{
+		pfc::string8 path;
+		get_feature_list_path(path, true);
+
+		try
+		{
+			abort_callback_impl abort;
+			service_ptr_t<file> stream;
+			filesystem::g_open_write_new(stream, path, abort);
+
+			save_feature_list_to_json_file(p_data, stream.get_ptr(), abort);
 		}
 		catch (const exception_io &exc)
 		{

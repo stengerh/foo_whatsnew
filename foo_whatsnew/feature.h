@@ -1,5 +1,7 @@
 #pragma once
 
+#include "component_name_resolver.h"
+
 class feature_info;
 class feature_handle;
 class feature_kind;
@@ -24,9 +26,18 @@ public:
 	virtual t_size get_key_size() const = 0;
 	virtual void set_key(const t_uint8* p_data, t_size p_data_size) = 0;
 
-	virtual void copy(const feature_info &p_source) {set_name(p_source.get_name()); set_kind_guid(p_source.get_kind_guid()); set_key(p_source.get_key(), p_source.get_key_size());}
+#ifdef EXTRACT_COMPONENT_NAME
+	virtual bool has_component_name() const = 0;
+	virtual const char *get_component_name() const = 0;
+	virtual void clear_component_name() = 0;
+	virtual void set_component_name(const char *p_name, t_size p_name_length = pfc::infinite_size) = 0;
 
-	void reset() {set_name(""); set_kind_guid(pfc::guid_null); set_key(0, 0);}
+	void set_component_name_from_service(service_ptr p_ptr, component_name_resolver *p_resolver);
+#endif
+
+	virtual void copy(const feature_info &p_source) {set_name(p_source.get_name()); set_kind_guid(p_source.get_kind_guid()); set_key(p_source.get_key(), p_source.get_key_size()); set_component_name(p_source.get_component_name());}
+
+	void reset();
 
 	static int compare_raw_data(const feature_info &p_item1, const feature_info &p_item2);
 
@@ -68,7 +79,7 @@ public:
 class feature_scanner : public service_base
 {
 public:
-	virtual void scan(enum_feature_info_callback &p_callback) = 0;
+	virtual void scan(enum_feature_info_callback &p_callback, component_name_resolver *p_resolver) = 0;
 
 	FB2K_MAKE_SERVICE_INTERFACE_ENTRYPOINT(feature_scanner);
 };
@@ -151,8 +162,13 @@ public:
 // {19728E66-6523-439f-8D1F-2B1C0809F067}
 FOOGUIDDECL const GUID feature_kind::class_guid = { 0x19728e66, 0x6523, 0x439f, { 0x8d, 0x1f, 0x2b, 0x1c, 0x8, 0x9, 0xf0, 0x67 } };
 
+#ifdef EXTRACT_COMPONENT_NAME
+// {5AB22785-6416-4B9D-B649-4B149B881A81}
+FOOGUIDDECL const GUID feature_scanner::class_guid = { 0x5ab22785, 0x6416, 0x4b9d, { 0xb6, 0x49, 0x4b, 0x14, 0x9b, 0x88, 0x1a, 0x81 } };
+#else
 // {C385C7CA-E984-4fb1-951B-8C68DDA2BD60}
 FOOGUIDDECL const GUID feature_scanner::class_guid = { 0xc385c7ca, 0xe984, 0x4fb1, { 0x95, 0x1b, 0x8c, 0x68, 0xdd, 0xa2, 0xbd, 0x60 } };
+#endif
 
 // {F90B3B13-3773-43e3-A5ED-30B4A358DD7A}
 FOOGUIDDECL const GUID feature_log::class_guid = { 0xf90b3b13, 0x3773, 0x43e3, { 0xa5, 0xed, 0x30, 0xb4, 0xa3, 0x58, 0xdd, 0x7a } };

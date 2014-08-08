@@ -9,7 +9,9 @@ public:
 	static int compare(const feature_info *p_item1, const feature_info *p_item2)
 	{
 		int rv = pfc::compare_t(p_item1->get_kind_guid(), p_item2->get_kind_guid());
-		if (rv == 0) rv = feature_info::compare_raw_data(*p_item1, *p_item2);
+		if (rv == 0) {
+			rv = feature_info::compare_raw_data(*p_item1, *p_item2);
+		}
 		return rv;
 	}
 };

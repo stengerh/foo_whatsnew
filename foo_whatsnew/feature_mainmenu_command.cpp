@@ -62,7 +62,11 @@ class feature_scanner_mainmenu_command : public feature_scanner
 	}
 
 public:
+#ifdef EXTRACT_COMPONENT_NAME
+	virtual void scan(enum_feature_info_callback &p_callback, component_name_resolver * p_resolver)
+#else
 	virtual void scan(enum_feature_info_callback &p_callback)
+#endif
 	{
 		feature_info_impl info;
 		info.set_kind_guid(feature_kinds::mainmenu_command);
@@ -79,6 +83,10 @@ public:
 		{
 			path.reset();
 			get_command_path(path, ptr->get_parent());
+
+#ifdef EXTRACT_COMPONENT_NAME
+			info.set_component_name_from_service(ptr, p_resolver);
+#endif
 
 			const t_uint32 count = ptr->get_command_count();
 			for (t_uint32 n = 0; n < count; ++n)

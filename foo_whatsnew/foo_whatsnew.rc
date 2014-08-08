@@ -88,6 +88,20 @@ END
 IDI_Added               ICON                    "added.ico"
 IDI_Removed             ICON                    "removed.ico"
 IDI_Overlay             ICON                    "overlay.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_Icons8              BITMAP                  "icons8.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_Icons32             PNG                     "icons32.png"
 #endif    // Englisch (USA) resources
 /////////////////////////////////////////////////////////////////////////////
 

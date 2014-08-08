@@ -4,8 +4,11 @@
 
 DECLARE_COMPONENT_VERSION(
 	"Feature Watcher",
-	"1.0.8",
+	"1.1.0",
 	"Watches available features and reports changes.\n"
+	"\n"
+	"Base64 encoder and decoder\n"
+	"Copyright (C) 2004-2008 René Nyffenegger\n"
 	"\n"
 	"Some icons by Yusuke Kamiyamane. Licensed under a Creative Commons Attribution 3.0 License.\n"
 	"- http://p.yusukekamiyamane.com/\n"
@@ -13,6 +16,32 @@ DECLARE_COMPONENT_VERSION(
 );
 
 static void g_show_feature_log();
+
+static CIconHandle CreateNotificationIcon(int cx, int cy)
+{
+		CIconHandle icon;
+#if 1
+		CImageList iml;
+		iml.Create(cx, cy, ILC_COLOR32 | ILC_MASK, 2, 2);
+
+		CIcon baseIcon = static_api_ptr_t<ui_control>()->load_main_icon(cx, cy);
+		iml.AddIcon(baseIcon);
+
+		CIcon overlayIcon;
+		overlayIcon.LoadIcon(IDI_Overlay);
+		iml.AddIcon(overlayIcon);
+
+		CImageList iml2;
+		if (iml2.Merge(iml, 0, iml, 1, 0, 0))
+		{
+			icon = iml2.GetIcon(0);
+		}
+#else
+		icon.LoadIcon(IDI_Added);
+#endif
+
+		return icon;
+}
 
 template <class T>
 class CTaskbarNotifyIconImpl
@@ -179,29 +208,8 @@ public:
 			title << "foobar2000";
 		title << "?";
 
-		CIconHandle icon;
-#if 1
-		CImageList iml;
-		iml.Create(cxSmIcon, cySmIcon, ILC_COLOR32 | ILC_MASK, 2, 2);
-
-		CIcon baseIcon = static_api_ptr_t<ui_control>()->load_main_icon(cxSmIcon, cySmIcon);
-		iml.AddIcon(baseIcon);
-
-		CIcon overlayIcon;
-		overlayIcon.LoadIcon(IDI_Overlay);
-		iml.AddIcon(overlayIcon);
-
-		CImageList iml2;
-		if (iml2.Merge(iml, 0, iml, 1, 0, 0))
-		{
-			icon = iml2.GetIcon(0);
-		}
-#else
-		icon.LoadIcon(IDI_Added);
-#endif
-
 		AddNotifyIcon(
-			icon,
+			CreateNotificationIcon(cxSmIcon, cySmIcon),
 			ID_NOTIFYICON,
 			"Features added or removed",
 			"Features were added or removed. Click here to view the details.",
@@ -245,6 +253,7 @@ static void g_show_feature_log()
 	{
 		CFeatureLogViewer *ptr = new CFeatureLogViewer();
 		g_log_window = ptr->Create(core_api::get_main_window());
+		ptr->SetIcon(CreateNotificationIcon(::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON)), FALSE);
 		ptr->ShowWindow(SW_SHOW);
 	}
 	::SetForegroundWindow(g_log_window);

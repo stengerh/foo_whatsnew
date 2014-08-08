@@ -18,7 +18,7 @@ public:
 
 	virtual const char *get_name()
 	{
-		return "Labbeduddel";
+		return "Test Feature Type";
 	}
 
 	virtual bool get_description(pfc::string_base &p_out)
@@ -32,11 +32,15 @@ static service_factory_single_t<feature_kind_test> g_feature_kind_factory;
 class feature_scanner_test : public feature_scanner
 {
 public:
+#ifdef EXTRACT_COMPONENT_NAME
+	virtual void scan(enum_feature_info_callback &p_callback, component_name_resolver * p_resolver)
+#else
 	virtual void scan(enum_feature_info_callback &p_callback)
+#endif
 	{
 		feature_info_impl info;
 		info.set_kind_guid(feature_kinds::test);
-		info.set_name("GenjuroXL");
+		info.set_name("Test Feature");
 
 		p_callback.on_feature_info(info);
 	}

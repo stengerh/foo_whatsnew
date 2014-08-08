@@ -47,14 +47,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;FOO_WHATSNEW_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>EXTRACT_COMPONENT_NAME;WIN32;_DEBUG;_WINDOWS;_USRDLL;FOO_WHATSNEW_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\sdk\2011-03-11\;..\..\..\wtl80\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\sdk\2011-03-11\;..\..\..\wtl80\include\;..\rapidjson\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>shared.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -79,7 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\sdk\2011-03-11\;..\..\..\wtl80\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\sdk\2011-03-11\;..\..\..\wtl80\include\;..\rapidjson\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>shared.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -99,6 +99,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="base64.cpp" />
+    <ClCompile Include="component_name_resolver.cpp" />
+    <ClCompile Include="component_name_resolver_impl.cpp" />
     <ClCompile Include="feature.cpp" />
     <ClCompile Include="feature_advanced_setting.cpp" />
     <ClCompile Include="feature_columns_ui.cpp" />
@@ -109,6 +112,8 @@
     <ClCompile Include="feature_kind_feature_kind.cpp" />
     <ClCompile Include="feature_library_viewer.cpp" />
     <ClCompile Include="feature_log_impl.cpp" />
+    <ClCompile Include="feature_log_reader_json.cpp" />
+    <ClCompile Include="feature_log_writer_json.cpp" />
     <ClCompile Include="feature_mainmenu_command.cpp" />
     <ClCompile Include="feature_manager_impl.cpp" />
     <ClCompile Include="feature_preferences_page.cpp" />
@@ -124,8 +129,12 @@
     <ClCompile Include="tools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base64.h" />
+    <ClInclude Include="component_name_resolver.h" />
+    <ClInclude Include="component_name_resolver_impl.h" />
     <ClInclude Include="feature.h" />
     <ClInclude Include="feature_impl.h" />
+    <ClInclude Include="feature_log_json.h" />
     <ClInclude Include="feature_tools.h" />
     <ClInclude Include="FeatureLogViewer.h" />
     <ClInclude Include="resource.h" />
@@ -133,8 +142,9 @@
     <ClInclude Include="tools.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="added-removed-overlay.ico" />
     <None Include="added.ico" />
+    <None Include="icons32.png" />
+    <None Include="icons8.bmp" />
     <None Include="overlay.ico" />
     <None Include="removed.ico" />
   </ItemGroup>
