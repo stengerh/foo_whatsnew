@@ -124,11 +124,13 @@ public:
 			m_items |= item_flag_key;
 			m_state = state_item;
 			return true;
+#ifdef EXTRACT_COMPONENT_NAME
 		case state_value_component:
 			m_info.set_component_name(str, length);
 			m_items |= item_flag_component;
 			m_state = state_item;
 			return true;
+#endif
 		default:
 			return false;
 		}

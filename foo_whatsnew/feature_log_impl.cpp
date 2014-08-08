@@ -125,7 +125,11 @@ class feature_log_impl : public feature_log
 		service_ptr_t<feature_scanner> ptr;
 		while (e.next(ptr))
 		{
+#ifdef EXTRACT_COMPONENT_NAME
 			ptr->scan(enum_feature_info_callback_impl(p_out), &resolver);
+#else
+			ptr->scan(enum_feature_info_callback_impl(p_out));
+#endif
 		}
 	}
 

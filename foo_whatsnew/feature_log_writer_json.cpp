@@ -33,11 +33,13 @@ void save_feature_list_to_json_string(const pfc::list_base_const_t<feature_handl
 		std::string key_base64 = base64_encode(info->get_key(), info->get_key_size());
 		writer.String(key_base64.c_str());
 
+#ifdef EXTRACT_COMPONENT_NAME
 		if (info->has_component_name())
 		{
 			writer.String("component");
 			writer.String(info->get_component_name());
 		}
+#endif
 
 		writer.EndObject();
 	}

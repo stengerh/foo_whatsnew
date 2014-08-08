@@ -16,13 +16,23 @@ struct t_column_data
 
 static const t_column_data g_default_column_data =
 {
-	{400, 0, 80, 0, 0},
+	{
+		400,
+		0,
+		80,
+		0,
+#ifdef EXTRACT_COMPONENT_NAME
+		0,
+#endif
+	},
 	{
 		CFeatureLogViewer::column_feature_name,
 		CFeatureLogViewer::column_feature_kind,
 		CFeatureLogViewer::column_change_kind,
 		CFeatureLogViewer::column_timestamp,
-		CFeatureLogViewer::column_component_name
+#ifdef EXTRACT_COMPONENT_NAME
+		CFeatureLogViewer::column_component_name,
+#endif
 	},
 };
 

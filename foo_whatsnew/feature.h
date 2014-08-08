@@ -35,7 +35,14 @@ public:
 	void set_component_name_from_service(service_ptr p_ptr, component_name_resolver *p_resolver);
 #endif
 
-	virtual void copy(const feature_info &p_source) {set_name(p_source.get_name()); set_kind_guid(p_source.get_kind_guid()); set_key(p_source.get_key(), p_source.get_key_size()); set_component_name(p_source.get_component_name());}
+	virtual void copy(const feature_info &p_source) {
+		set_name(p_source.get_name());
+		set_kind_guid(p_source.get_kind_guid());
+		set_key(p_source.get_key(), p_source.get_key_size());
+#ifdef EXTRACT_COMPONENT_NAME
+		set_component_name(p_source.get_component_name());
+#endif
+	}
 
 	void reset();
 
@@ -79,7 +86,11 @@ public:
 class feature_scanner : public service_base
 {
 public:
+#ifdef EXTRACT_COMPONENT_NAME
 	virtual void scan(enum_feature_info_callback &p_callback, component_name_resolver *p_resolver) = 0;
+#else
+	virtual void scan(enum_feature_info_callback &p_callback) = 0;
+#endif
 
 	FB2K_MAKE_SERVICE_INTERFACE_ENTRYPOINT(feature_scanner);
 };
