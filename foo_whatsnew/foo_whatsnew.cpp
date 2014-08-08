@@ -4,18 +4,21 @@
 
 DECLARE_COMPONENT_VERSION(
 	"Feature Watcher",
-	"1.1.0",
+	"1.1.1",
 	"Watches available features and reports changes.\n"
 	"\n"
+	"Copyright (C) 2014 Holger Stenger\n"
+	"- https://github.com/stengerh/foo_whatsnew\n"
+	"\n"
 	"RadpidJSON\n"
-	"Copyright (C) 2011.2014 Milo Yip\n"
+	"Copyright (C) 2011-2014 Milo Yip\n"
 	"- https://github.com/miloyip/rapidjson/\n"
 	"\n"
 	"Base64 encoder and decoder\n"
-	"Copyright (C) 2004-2008 René Nyffenegger\n"
+	"Copyright (C) 2004-2008 Ren\xc3\xa9 Nyffenegger\n"
 	"- http://www.adp-gmbh.ch/cpp/common/base64.html\n"
 	"\n"
-	"Some icons by 7. Licensed under a Creative Commons Attribution 3.0 License.\n"
+	"Some icons by Yusuke Kamiyamane. Licensed under a Creative Commons Attribution 3.0 License.\n"
 	"- http://p.yusukekamiyamane.com/\n"
 	"- http://creativecommons.org/licenses/by/3.0/\n"
 );
