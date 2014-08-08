@@ -7,8 +7,13 @@ DECLARE_COMPONENT_VERSION(
 	"1.1.0",
 	"Watches available features and reports changes.\n"
 	"\n"
+	"RadpidJSON\n"
+	"Copyright (C) 2011.2014 Milo Yip\n"
+	"- https://github.com/miloyip/rapidjson/\n"
+	"\n"
 	"Base64 encoder and decoder\n"
 	"Copyright (C) 2004-2008 René Nyffenegger\n"
+	"- http://www.adp-gmbh.ch/cpp/common/base64.html\n"
 	"\n"
 	"Some icons by Yusuke Kamiyamane. Licensed under a Creative Commons Attribution 3.0 License.\n"
 	"- http://p.yusukekamiyamane.com/\n"
