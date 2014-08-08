@@ -31,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "columns_ui-sdk", "columns_u
 		{E8091321-D79D-4575-86EF-064EA1A4A20D} = {E8091321-D79D-4575-86EF-064EA1A4A20D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rapidjson", "rapidjson\rapidjson.vcxproj", "{A51E7F12-7E05-4E51-8489-D6BC41E6F334}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -83,6 +85,12 @@ Global
 		{F0E3556E-0F4E-4DEE-AEC3-938BD6C94CF0}.Release|Win32.ActiveCfg = Release|Win32
 		{F0E3556E-0F4E-4DEE-AEC3-938BD6C94CF0}.Release|Win32.Build.0 = Release|Win32
 		{F0E3556E-0F4E-4DEE-AEC3-938BD6C94CF0}.Release|x64.ActiveCfg = Release|Win32
+		{A51E7F12-7E05-4E51-8489-D6BC41E6F334}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A51E7F12-7E05-4E51-8489-D6BC41E6F334}.Debug|Win32.Build.0 = Debug|Win32
+		{A51E7F12-7E05-4E51-8489-D6BC41E6F334}.Debug|x64.ActiveCfg = Debug|Win32
+		{A51E7F12-7E05-4E51-8489-D6BC41E6F334}.Release|Win32.ActiveCfg = Release|Win32
+		{A51E7F12-7E05-4E51-8489-D6BC41E6F334}.Release|Win32.Build.0 = Release|Win32
+		{A51E7F12-7E05-4E51-8489-D6BC41E6F334}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

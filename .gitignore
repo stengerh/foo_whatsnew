@@ -1,3 +1,4 @@
+*.aps
 *.opensdf
 *.sdf
 *.suo
@@ -9,3 +10,5 @@
 /columns_ui-sdk/Release
 /columns_ui-sdk/Debug
 /foo_whatsnew/ipch
+/rapidjson/Release
+/rapidjson/Debug

@@ -30,7 +30,11 @@ static service_factory_single_t<feature_kind_ui_element> g_feature_kind_factory;
 class feature_scanner_ui_element : public feature_scanner
 {
 public:
-	void scan(enum_feature_info_callback &p_callback)
+#ifdef EXTRACT_COMPONENT_NAME
+	virtual void scan(enum_feature_info_callback &p_callback, component_name_resolver * p_resolver)
+#else
+	virtual void scan(enum_feature_info_callback &p_callback)
+#endif
 	{
 		service_enum_t<ui_element> e;
 		service_ptr_t<ui_element> ptr;
@@ -54,6 +58,10 @@ public:
 				stream.write_lendian_t(guid, abort_callback_impl());
 
 				info.set_key(buffer.get_ptr(), buffer.get_size());
+
+#ifdef EXTRACT_COMPONENT_NAME
+				info.set_component_name_from_service(ptr, p_resolver);
+#endif
 
 				if (!p_callback.on_feature_info(info)) break;
 			}

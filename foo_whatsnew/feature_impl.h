@@ -3,6 +3,8 @@
 class feature_info_impl : public feature_info
 {
 	pfc::string_simple m_name;
+	bool m_component_name_valid;
+	pfc::string_simple m_component_name;
 	GUID m_kind_guid;
 	pfc::array_t<t_uint8> m_data;
 
@@ -13,6 +15,13 @@ public:
 
 	virtual const char *get_name() const {return m_name;}
 	virtual void set_name(const char *p_name, t_size p_name_length = pfc::infinite_size) {m_name.set_string(p_name, p_name_length);}
+
+#ifdef EXTRACT_COMPONENT_NAME
+	virtual bool has_component_name() const {return m_component_name_valid;}
+	virtual const char *get_component_name() const {return m_component_name;}
+	virtual void clear_component_name() {m_component_name_valid = false; m_component_name.set_string("", 0);}
+	virtual void set_component_name(const char *p_name, t_size p_name_length = pfc::infinite_size) {m_component_name_valid = true; m_component_name.set_string(p_name, p_name_length);}
+#endif
 
 	virtual GUID get_kind_guid() const {return m_kind_guid;}
 	virtual void set_kind_guid(const GUID &p_guid) {m_kind_guid = p_guid;}

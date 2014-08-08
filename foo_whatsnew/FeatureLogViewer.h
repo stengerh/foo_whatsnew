@@ -13,6 +13,18 @@ public:
 
 	enum {IDD = IDD_FeatureLogViewer};
 
+	enum column_id_t
+	{
+		column_feature_name,
+		column_feature_kind,
+		column_change_kind,
+		column_timestamp,
+#ifdef EXTRACT_COMPONENT_NAME
+		column_component_name,
+#endif
+		column_count
+	};
+
 	BEGIN_MSG_MAP(thisClass)
 	{
 		lResult = 0;

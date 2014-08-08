@@ -32,7 +32,11 @@ static service_factory_single_t<feature_kind_test> g_feature_kind_factory;
 class feature_scanner_test : public feature_scanner
 {
 public:
+#ifdef EXTRACT_COMPONENT_NAME
+	virtual void scan(enum_feature_info_callback &p_callback, component_name_resolver * p_resolver)
+#else
 	virtual void scan(enum_feature_info_callback &p_callback)
+#endif
 	{
 		feature_info_impl info;
 		info.set_kind_guid(feature_kinds::test);

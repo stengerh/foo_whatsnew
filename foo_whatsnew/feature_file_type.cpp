@@ -31,7 +31,11 @@ static service_factory_single_t<feature_kind_file_type> g_file_type_factory;
 class feature_scanner_file_type : public feature_scanner
 {
 public:
+#ifdef EXTRACT_COMPONENT_NAME
+	virtual void scan(enum_feature_info_callback &p_callback, component_name_resolver * p_resolver)
+#else
 	virtual void scan(enum_feature_info_callback &p_callback)
+#endif
 	{
 		service_enum_t<input_file_type> e;
 		service_ptr_t<input_file_type> ptr;
@@ -47,6 +51,10 @@ public:
 		while (e.next(ptr))
 		{
 			const unsigned count = ptr->get_count();
+
+#ifdef EXTRACT_COMPONENT_NAME
+			info.set_component_name_from_service(ptr, p_resolver);
+#endif
 
 			for (unsigned n = 0; n < count; ++n)
 			{

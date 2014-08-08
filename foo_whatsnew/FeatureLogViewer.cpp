@@ -10,18 +10,24 @@ static cfg_window_size cfg_window_size_log_viewer(guid_cfg_window_size);
 
 struct t_column_data
 {
-	int width[4];
-	int order[4];
+	int width[CFeatureLogViewer::column_count];
+	int order[CFeatureLogViewer::column_count];
 };
 
 static const t_column_data g_default_column_data =
 {
-	{400, 0, 80, 0},
-	{0, 1, 2, 3},
+	{400, 0, 80, 0, 0},
+	{
+		CFeatureLogViewer::column_feature_name,
+		CFeatureLogViewer::column_feature_kind,
+		CFeatureLogViewer::column_change_kind,
+		CFeatureLogViewer::column_timestamp,
+		CFeatureLogViewer::column_component_name
+	},
 };
 
-// {909694D0-FCC9-4a1d-9B96-8DB7A27D8596}
-static const GUID guid_cfg_column_data = { 0x909694d0, 0xfcc9, 0x4a1d, { 0x9b, 0x96, 0x8d, 0xb7, 0xa2, 0x7d, 0x85, 0x96 } };
+// {A5FBE375-1A9E-497F-9B93-F6C351FB9CE0}
+static const GUID guid_cfg_column_data = { 0xa5fbe375, 0x1a9e, 0x497f, { 0x9b, 0x93, 0xf6, 0xc3, 0x51, 0xfb, 0x9c, 0xe0 } };
 static cfg_struct_t<t_column_data> cfg_column_data(guid_cfg_column_data, g_default_column_data);
 
 static bool g_find_by_guid(const GUID &p_guid, feature_kind_ptr &p_out)
@@ -42,17 +48,12 @@ static bool g_find_by_guid(const GUID &p_guid, feature_kind_ptr &p_out)
 static CImageList CreateStateImageList(int cx, int cy)
 {
 	CImageList iml;
-	iml.Create(cx, cy, ILC_COLOR8 | ILC_MASK, 0, 4);
+	iml.Create(16, 16, ILC_COLOR8 | ILC_MASK, 0, 4);
 
-	CIcon icon;
+	CBitmap bmp;
+	bmp.Attach((HBITMAP) ::LoadImage(core_api::get_my_instance(), MAKEINTRESOURCE(IDB_Icons8), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR));
 
-	icon.LoadIcon(IDI_Added);
-	iml.AddIcon(icon);
-	icon.DestroyIcon();
-
-	icon.LoadIcon(IDI_Removed);
-	iml.AddIcon(icon);
-	icon.DestroyIcon();
+	iml.Add(bmp, 0xff00ff);
 
 	return iml;
 }
@@ -81,47 +82,81 @@ public:
 
 void CFeatureLogViewer::AddLogItem(const feature_log_item &p_item)
 {
-	LVITEM item;
-	item.mask = LVIF_TEXT | LVIF_STATE | LVIF_GROUPID;
-	item.iItem = m_log.GetItemCount();
-	item.iSubItem = 0;
-	item.stateMask = LVIS_STATEIMAGEMASK;
-
-	string_os_from_utf8 ostemp;
+	int row = -1;
 
 	const feature_info *info = p_item.get_feature()->get_info();
 
-	m_feature_kind_groupids.query(info->get_kind_guid(), item.iGroupId);
-	item.state = INDEXTOSTATEIMAGEMASK(p_item.get_change_kind());
-
-	ostemp.convert(info->get_name());
-	item.pszText = const_cast<TCHAR*>(ostemp.get_ptr());
-	item.iItem = m_log.InsertItem(&item);
-
-	feature_kind_ptr kind;
-	if (g_find_by_guid(info->get_kind_guid(), kind))
+	// Use loop+switch to insert columns in numerical order.
+	for (int column = 0; column < column_count; ++column)
 	{
-		pfc::string8 name;
-		kind->get_name(name);
-		m_log.SetItemText(item.iItem, 1, string_os_from_utf8(name));
-	}
+		pfc::string8 text;
 
-	TCHAR *change = _T("");
-	switch (p_item.get_change_kind())
-	{
-	case feature_log_item::change_added:
-		change = _T("Added");
-		break;
-	case feature_log_item::change_removed:
-		change = _T("Removed");
-		break;
-	case feature_log_item::change_modified:
-		change = _T("Modified");
-		break;
-	}
-	m_log.SetItemText(item.iItem, 2, change);
+		switch (column)
+		{
+		case column_feature_name:
+			{
+				text = info->get_name();
+			}
+			break;
+		case column_feature_kind:
+			{
+				feature_kind_ptr kind;
+				if (g_find_by_guid(info->get_kind_guid(), kind))
+				{
+					kind->get_name(text);
+				}
+			}
+			break;
+		case column_change_kind:
+			{
+				switch (p_item.get_change_kind())
+				{
+				case feature_log_item::change_added:
+					text = "Added";
+					break;
+				case feature_log_item::change_removed:
+					text = "Removed";
+					break;
+				case feature_log_item::change_modified:
+					text = "Modified";
+					break;
+				}
+			}
+			break;
+		case column_timestamp:
+			text = pfc::format_timestamp(p_item.get_timestamp(), true);
+			break;
+#ifdef EXTRACT_COMPONENT_NAME
+		case column_component_name:
+			if (info->has_component_name())
+			{
+				text = info->get_component_name();
+			}
+			break;
+#endif
+		}
 
-	m_log.SetItemText(item.iItem, 3, string_os_from_utf8(pfc::format_timestamp(p_item.get_timestamp(), true)));
+		if (column == 0)
+		{
+			string_os_from_utf8 ostemp(text);
+
+			LVITEM item;
+			item.mask = LVIF_TEXT | LVIF_STATE | LVIF_GROUPID;
+			item.iItem = m_log.GetItemCount();
+			item.iSubItem = 0;
+			item.stateMask = LVIS_STATEIMAGEMASK;
+			item.state = INDEXTOSTATEIMAGEMASK(p_item.get_change_kind());
+			item.pszText = const_cast<TCHAR*>(ostemp.get_ptr());
+
+			m_feature_kind_groupids.query(info->get_kind_guid(), item.iGroupId);
+
+			row = m_log.InsertItem(&item);
+		}
+		else
+		{
+			m_log.SetItemText(row, column, string_os_from_utf8(text));
+		}
+	}
 }
 
 static const dialog_resize_helper::param g_resize_helper_table[] =
@@ -149,12 +184,37 @@ BOOL CFeatureLogViewer::OnInitDialog(HWND hWndFocus, LPARAM lInitParam)
 
 	m_log.SetImageList(CreateStateImageList(16, 16), LVSIL_STATE);
 
-	m_log.InsertColumn(0, _T("Name"), LVCFMT_LEFT, cfg_column_data.get_value().width[0]);
-	m_log.InsertColumn(1, _T("Type"), LVCFMT_LEFT, cfg_column_data.get_value().width[1]);
-	m_log.InsertColumn(2, _T("Change"), LVCFMT_LEFT, cfg_column_data.get_value().width[2]);
-	m_log.InsertColumn(3, _T("Date"), LVCFMT_LEFT, cfg_column_data.get_value().width[3]);
+	for (int column = 0; column < column_count; ++column)
+	{
+		LPCTSTR heading = TEXT("TODO");
+		int format = LVCFMT_LEFT;
+		int width = cfg_column_data.get_value().width[column];
 
-	m_log.SetColumnOrderArray(4, cfg_column_data.get_value().order);
+		switch (column)
+		{
+		case column_feature_name:
+			heading = TEXT("Name");
+			break;
+		case column_feature_kind:
+			heading = TEXT("Type");
+			break;
+		case column_change_kind:
+			heading = TEXT("Change");
+			break;
+		case column_timestamp:
+			heading = TEXT("Date");
+			break;
+#ifdef EXTRACT_COMPONENT_NAME
+		case column_component_name:
+			heading = TEXT("Component");
+			break;
+#endif
+		}
+
+		m_log.InsertColumn(column, heading, format, width);
+	}
+
+	BOOL result = m_log.SetColumnOrderArray(column_count, cfg_column_data.get_value().order);
 
 	m_log.EnableGroupView(TRUE);
 
@@ -182,12 +242,12 @@ void CFeatureLogViewer::OnDestroy()
 
 	cfg_window_size_log_viewer.on_window_destruction(*this);
 
-	for (int n = 0; n < 4; ++n)
+	for (int n = 0; n < column_count; ++n)
 	{
 		cfg_column_data.get_value().width[n] = m_log.GetColumnWidth(n);
 	}
 
-	m_log.GetColumnOrderArray(4, cfg_column_data.get_value().order);
+	BOOL result = m_log.GetColumnOrderArray(column_count, cfg_column_data.get_value().order);
 }
 
 bool CFeatureLogViewer::pretranslate_message(MSG *msg)
